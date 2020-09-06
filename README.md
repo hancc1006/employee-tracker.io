@@ -3,6 +3,14 @@ npm install
 
 Please change password for connection to mysql in index.js
 
+Links:
+
+https://github.com/hancc1006/employee-tracker.io
+
+Video:
+
+https://drive.google.com/file/d/1o21kX9bkxq-8WcnZ-UtYDji-wVn3pdU6/view?usp=sharing
+
 # Unit 12 MySQL Homework: Employee Tracker
 
 Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. Often these interfaces are known as **C**ontent **M**anagement **S**ystems. In this homework assignment, your challenge is to architect and build a solution for managing a company's employees using node, inquirer, and MySQL.
