@@ -1,7 +1,7 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require('console.table');
-
+let titlesRole=["Engineer","Teacher","Doctor"];
 // const password = require("./password.json");
 const connection = mysql.createConnection({
   host: "localhost",
@@ -28,6 +28,8 @@ function inquire(){
             'View All Employees',
             'View All Employees by Department',
             'Add Employee',
+            'Add Department',
+            'Add Role',
             'Update Employee Role',
             'View All Roles',
             'Exit',
@@ -98,11 +100,7 @@ function addEmployee() {
             type:"list",
             message:"What is the employee's title?",
             name:"title",
-            choices:[
-                "Engineer",
-                "Teacher",
-                "Doctor"
-            ]
+            choices:titlesRole,
             
         },
         {
@@ -191,6 +189,44 @@ function updateEmployee(){
   });
 }
 
+function addDepartment(){
+  inquirer.prompt([{
+    name:"department",
+    type:"input",
+    message:"Enter the department name to add",
+  }]).then(function(response){
+    connection.query("INSERT INTO department SET ?",{
+      name:response.department
+    })
+  })
+}
+
+function addRole(){
+  inquirer.prompt([
+    {
+      name:"addRole",
+      type:"list",
+      message:"Choose a role to add",
+    },{
+      name:"salary",
+      message:"How much is the salary?",
+      type:"number"
+    },{
+      name:"departmentID",
+      type:"number",
+      message:"What is the department id?"
+    }
+  ]).then(function(response){
+    connection.query("INSERT INTO role SET ?",{
+      title:response.addRole,
+      salary:response.salary,
+      department_id:response.departmentID,
+      
+    })
+    titlesRole.push(response.addRole);
+  })
+}
+
 function exit() {
   connection.end(function(err) {
     if (err) {
@@ -218,6 +254,12 @@ const init = function(){
           break;
         case "View All Roles":
             viewRoles();
+          break;
+        case "Add Department":
+          addDepartment();
+          break;
+        case "Add Role":
+          addRole();
           break;
         case "Exit":
             exit();
