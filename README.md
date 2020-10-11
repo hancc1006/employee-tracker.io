@@ -10,6 +10,7 @@ https://github.com/hancc1006/employee-tracker.io
 Video:
 
 https://drive.google.com/file/d/1o21kX9bkxq-8WcnZ-UtYDji-wVn3pdU6/view?usp=sharing
+https://drive.google.com/file/d/1UgEIULt1AH_zEP-VyuWIJA-qwWbTrj5i/view?usp=sharing
 
 # Unit 12 MySQL Homework: Employee Tracker
 
