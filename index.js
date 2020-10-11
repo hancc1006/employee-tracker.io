@@ -1,13 +1,23 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const cTable = require('console.table');
+//const cTable = require('console.table');
 let titlesRole=["Engineer","Teacher","Doctor"];
+const choice=[
+  'View All Employees',
+  'View All Employees by Department',
+  'Add Employee',
+  'Add Department',
+  'Add Role',
+  'Update Employee Role',
+  'View All Roles',
+  'Exit',
+];
 // const password = require("./password.json");
 const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "",
+  password: "Dragonleaf13!A",
   database: "employee_db"
 });
 connection.connect(function (error) {
@@ -24,16 +34,7 @@ function inquire(){
         type: "list",
         message: "What would you like to do?",
         name: "select",
-        choices:[
-            'View All Employees',
-            'View All Employees by Department',
-            'Add Employee',
-            'Add Department',
-            'Add Role',
-            'Update Employee Role',
-            'View All Roles',
-            'Exit',
-        ]
+        choices:choice,
       }
     ])
 }
@@ -158,16 +159,17 @@ function updateEmployee(){
           type: "list",
           name: "update",
           message: "Select employee to update role",
-          choices: employees
+          choices: employees,
         },
         {
           type: "list",
           message: "Select a new role",
-          choices: ["Manager", "Employee", "Trainee"],
-          name: "role"
+          choices: titlesRole,
+          name: "role",
         }
       ])
       .then(function(response) {
+        
         console.log("Updating employee", response);
         const ID = {};
         ID.employeeId = parseInt(response.update.split(" ")[0]);
@@ -195,8 +197,12 @@ function addDepartment(){
     type:"input",
     message:"Enter the department name to add",
   }]).then(function(response){
-    connection.query("INSERT INTO department SET ?",{
-      name:response.department
+    connection.query("INSERT INTO department SET ?",
+      [response.department]
+    ,
+    function(err,res){
+      console.log(`You have added a department ${response.department}`);
+      init();
     })
   })
 }
@@ -205,7 +211,7 @@ function addRole(){
   inquirer.prompt([
     {
       name:"addRole",
-      type:"list",
+      type:"input",
       message:"Choose a role to add",
     },{
       name:"salary",
@@ -217,14 +223,19 @@ function addRole(){
       message:"What is the department id?"
     }
   ]).then(function(response){
-    connection.query("INSERT INTO role SET ?",{
-      title:response.addRole,
+    connection.query("INSERT INTO role SET ?",
+      {title:response.addRole,
       salary:response.salary,
-      department_id:response.departmentID,
+      department_id:response.departmentID}
       
+    , 
+    function(err,res){
+      if(err) throw err;
+      titlesRole.push(response.addRole);
+      console.log(`The following role ${response.addRole} has been added with a salary of ${response.salary} and a department ID of ${response.departmentID}`);
+      init();
     })
-    titlesRole.push(response.addRole);
-  })
+  });
 }
 
 function exit() {
